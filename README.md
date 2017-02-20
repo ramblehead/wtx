@@ -1,2 +1,2 @@
 # wtx
-Wt, C++ Web Toolkit Extensions
+RH Extensions for Wt, C++ Web Toolkit
