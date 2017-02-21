@@ -10,6 +10,7 @@
 #include <Wt/WJavaScript>
 #include <Wt/WLogger>
 
+#include "reflection/refactorables.hpp"
 #include "utils/RH_CODE_POINT.hpp"
 
 namespace rh {
@@ -31,7 +32,7 @@ class JavaScriptWidget : public T {
   JavaScriptWidget(Ts&&... params)
     : Base(std::forward<Ts>(params)...),
       m_setWtRenderedSPtr(
-        std::make_shared<SetWtRendered>(this, S600_N(m_setWtRenderedSPtr)))
+        std::make_shared<SetWtRendered>(this, RH_N(m_setWtRenderedSPtr)))
   {}
 
   void render(Wt::WFlags<Wt::RenderFlag> flags) override {
@@ -74,7 +75,7 @@ class JavaScriptWidget : public T {
 
   std::string renderedAtBrowserJavaScriptPredicate() const {
     auto id = renderedAtBrowserId();
-    auto refreshed = S600_N(m_renderedAtBrowser);
+    auto refreshed = RH_N(m_renderedAtBrowser);
     return
       "($('#" + id + "').prop('"+ refreshed + "') !== undefined)";
   }
@@ -114,7 +115,7 @@ class JavaScriptWidget : public T {
 
   void renderAtBrowser() {
     std::string id = renderedAtBrowserId();
-    std::string rendered = S600_N(m_renderedAtBrowser);
+    std::string rendered = RH_N(m_renderedAtBrowser);
     Base::doJavaScript(
       "setTimeout(function() {\n"
       "  if(document.getElementById('" + id + "')) {\n"

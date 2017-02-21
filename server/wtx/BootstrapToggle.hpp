@@ -34,7 +34,7 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
                   State state = State::off,
                   Size size = Size::normal,
                   Style style = Style::primary)
-    : Base(parent), m_initialState(state)
+    : Base(parent)
   {
     std::stringstream javaScriptOptionsSS;
     // Not setting default options to allow html attributes override them.
@@ -69,9 +69,14 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
   std::string renderAtBrowserJavaScriptStatement() override {
     return
       "(function() {\n"
-      "  let $t = $('#" + id() + "');\n"
-      "  $t.bootstrapToggle(" + m_javaScriptOptions + ");\n"
-      "  $t.bootstrapToggle('" + State::itemName(m_initialState) + "');\n"
+      "  let $toggle = $('#" + id() + "');\n"
+      "  $toggle.bootstrapToggle(" + m_javaScriptOptions + ");\n"
+      "  let onchange = $toggle.attr('onchange');\n"
+      "  $toggle.attr('onchange', null);\n"
+      "  $toggle.bootstrapToggle('" +
+      std::string(isChecked() ? State::itemName(State::on) :
+                                State::itemName(State::off)) + "');\n"
+      "  $toggle.attr('onchange', onchange);\n"
       "}())\n";
   }
 
@@ -84,15 +89,18 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
     doJavaScript(
       "setTimeout(function() {\n"
       "  if(!" + renderedAtBrowserJavaScriptPredicate() + ") return;"
-      "  var toggle = $('#" + id() + "');\n"
-      "  var toggleDisabled = false;\n"
-      "  if(!!toggle.attr('disabled')) {\n"
+      "  let $toggle = $('#" + id() + "');\n"
+      "  let toggleDisabled = false;\n"
+      "  if(!!$toggle.attr('disabled')) {\n"
       "    toggleDisabled = true;\n"
-      "    toggle.bootstrapToggle('enable');\n"
+      "    $toggle.bootstrapToggle('enable');\n"
       "  }\n"
-      "  toggle.bootstrapToggle('update');\n"
+      "  let onchange = $toggle.attr('onchange');\n"
+      "  $toggle.attr('onchange', null);\n"
+      "  $toggle.bootstrapToggle('update');\n"
+      "  $toggle.attr('onchange', onchange);\n"
       "  if(toggleDisabled) {\n"
-      "    toggle.bootstrapToggle('disable');\n"
+      "    $toggle.bootstrapToggle('disable');\n"
       "  }\n"
       "}, 0);\n");
   }
@@ -102,14 +110,13 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
     doJavaScript(
       "setTimeout(function() {\n"
       "  if(!" + renderedAtBrowserJavaScriptPredicate() + ") return;"
-      "  $('#" + id() + "').bootstrapToggle(\n"
-      "      '" + Enabled::itemName(enabledEnum) + "');\n"
+      "  $('#" + id() + "').bootstrapToggle('" +
+      Enabled::itemName(enabledEnum) + "');\n"
       "}, 0);\n");
   };
 
  private:
   std::string m_javaScriptOptions;
-  State m_initialState;
 };
 
 } // namespace wtx
