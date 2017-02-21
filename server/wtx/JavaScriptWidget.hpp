@@ -75,9 +75,9 @@ class JavaScriptWidget : public T {
 
   std::string renderedAtBrowserJavaScriptPredicate() const {
     auto id = renderedAtBrowserId();
-    auto refreshed = RH_N(m_renderedAtBrowser);
+    auto rendered = RH_N(m_renderedAtBrowser);
     return
-      "($('#" + id + "').prop('"+ refreshed + "') !== undefined)";
+      "($('#" + id + "').prop('"+ rendered + "') !== undefined)";
   }
 
   virtual void renderAtBrowserFailed() {
@@ -137,7 +137,7 @@ class JavaScriptWidget : public T {
     m_renderedAtBrowser = true;
     afterRenderedAtBrowser();
   }
-  
+
   bool m_renderedAtBrowser {false};
   int m_runRenderAtBrowserAttemptsCount {0};
 };
