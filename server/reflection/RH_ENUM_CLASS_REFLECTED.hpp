@@ -2,21 +2,21 @@
 #ifndef __RH_ENUM_CLASS_REFLECTED_hpp__
 #define __RH_ENUM_CLASS_REFLECTED_hpp__
 
-#include "S600_STRINGIFY.h"
+#include "RH_STRINGIFY.h"
 
 #define RH_ENUM_CLASS_REFLECTED(RH_EnumClassReflected, ...)        \
   class RH_EnumClassReflected {                                    \
    public:                                                         \
     enum Item {__VA_ARGS__};                                       \
     static const char* enumName() {                                \
-      return S600_STRINGIFY(EnumClassReflected);                   \
+      return RH_STRINGIFY(EnumClassReflected);                     \
     }                                                              \
     static const char* itemName(Item value) {                      \
-      const char* enumNames[] {S600_STRINGIFY_LIST(__VA_ARGS__)};  \
+      const char* enumNames[] {RH_STRINGIFY_LIST(__VA_ARGS__)};    \
       return enumNames[static_cast<size_t>(value)];                \
     }                                                              \
     static const Item itemValue(const char* name) {                \
-      const char* enumNames[] {S600_STRINGIFY_LIST(__VA_ARGS__)};  \
+      const char* enumNames[] {RH_STRINGIFY_LIST(__VA_ARGS__)};    \
       for (size_t i = 0; i < sizeof(enumNames); ++i) {             \
         auto enumName = enumNames[i];                              \
         if(std::strcmp(enumName, name) == 0) {                     \
