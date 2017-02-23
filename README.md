@@ -1,5 +1,4 @@
-# wtx
-wtx are RH's Extensions for [Wt, C++ Web Toolkit](https://www.webtoolkit.eu/). It is an experimental project aimed at looking for the right way to implement 3rd party Wt widgets...
+_wtx_ is an experimental project aimed at looking for the right way to implement 3rd party extensions and widgets for [Wt, C++ Web Toolkit](https://www.webtoolkit.eu/).
 
 Currently, only [Bootstrap Toggle](http://www.bootstraptoggle.com/) is implemented.
 
