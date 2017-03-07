@@ -4,15 +4,9 @@
 // browser: http://localhost:8080/
 //      or: http://127.0.0.1:8080/
 
-#include <Wt/WBootstrapTheme>
-
 #include <Wt/WApplication>
-#include <Wt/WEnvironment>
+#include <Wt/WBootstrapTheme>
 #include <Wt/WContainerWidget>
-#include <Wt/WTemplate>
-
-#include <Wt/WPushButton>
-#include <Wt/WCheckBox>
 
 #include "wtx/BootstrapToggle.hpp"
 
@@ -26,12 +20,12 @@ class BootstrapToggleExampleApplication : public Wt::WApplication {
     requireJQuery(Wt::WLink("wtx/js/jquery-3.1.0.min.js").url());
 
     auto* theme = new Wt::WBootstrapTheme();
-    theme->setVersion(Wt::WBootstrapTheme::Version3);
+    theme->setVeron(Wt::WBootstrapTheme::Version3);
     setTheme(theme);
 
     setTitle("Wt Bootstrap Toggle Example");
 
-    auto *mainContainer = new Wt::WContainerWidget();
+    auto* mainContainer = new Wt::WContainerWidget();
 
     m_bootstrapToggle = new wtx::BootstrapToggle();
     mainContainer->addWidget(m_bootstrapToggle);
@@ -54,8 +48,8 @@ int main(int argc, char **argv) {
 }
 
 // Emacs, here are file hints,
-// Local Variables:
 // The following lompile command assumes that libwt and libwthttp
 // "so" files can be located in "./"
+// Local Variables:
 // compile-command: "g++ -std=c++14 BootstrapToggle.cpp -o BootstrapToggle -I../../server -I/home/rh/s600/s600-host/build/root/include -L /home/rh/s600/s600-host/build/root/lib -g -ggdb -lwt -lwthttp -Wl,-rpath=."
 // End:
