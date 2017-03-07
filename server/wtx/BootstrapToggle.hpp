@@ -22,34 +22,24 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
  public:
   RH_ENUM_CLASS_REFLECTED(
     Options, on, off, size, onstyle, offstyle, style, width, height);
-  RH_ENUM_CLASS_REFLECTED(State, on, off);
-  State stateDefault = State::off;
-  RH_ENUM_CLASS_REFLECTED(Size, large, normal, small, mini);
-  Size sizeDefault = Size::normal;
-  RH_ENUM_CLASS_REFLECTED(Style, primary, success, info, warning, danger);
-  Style styleDefault = Style::primary;
+  RH_ENUM_CLASS_REFLECTED(State, on, off, initial = off);
+  RH_ENUM_CLASS_REFLECTED(Size, large, normal, small, mini, initial = normal);
   RH_ENUM_CLASS_REFLECTED(Enabled, enable, disable);
 
   BootstrapToggle(Wt::WContainerWidget* parent = nullptr,
-                  State state = State::off,
-                  Size size = Size::normal,
-                  Style style = Style::primary)
+                  State state = State::initial,
+                  Size size = Size::initial)
     : Base(parent)
   {
+    setState(state);
+
     std::stringstream javaScriptOptionsSS;
     // Not setting default options to allow html attributes override them.
     // see http://www.bootstraptoggle.com/ for details.
-    if(style != styleDefault || size != sizeDefault) {
+    if(size != Size::initial) {
       javaScriptOptionsSS << "{";
-      if(style != styleDefault) {
-        javaScriptOptionsSS << Options::itemName(Options::style) << ":"
-                            << "'" << Style::itemName(style) << "'";
-      }
-      if(size != sizeDefault) {
-        if(style != styleDefault) javaScriptOptionsSS << ",";
-        javaScriptOptionsSS << Options::itemName(Options::size) << ":"
-                            << "'" << Size::itemName(size) << "'";
-      }
+      javaScriptOptionsSS << Options::itemName(Options::size) << ":"
+                          << "'" << size.itemName() << "'";
       javaScriptOptionsSS << "}";
     }
 
@@ -58,6 +48,14 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
     auto* app = Wt::WApplication::instance();
     app->useStyleSheet("wtx/css/bootstrap-toggle.css");
     app->require(Wt::WLink("wtx/js/bootstrap-toggle.js").url());
+  }
+
+  void setState(State state) {
+    setChecked(state == State::on ? true : false);
+  }
+
+  State state() {
+    return isChecked() ? State::on : State::off;
   }
 
   void setChecked(bool value) override {
@@ -86,6 +84,7 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
   }
 
   void updateBootstrapToggleState() {
+    if(!renderedAtBrowser()) return;
     doJavaScript(
       "setTimeout(function() {\n"
       "  if(!" + renderedAtBrowserJavaScriptPredicate() + ") return;"
@@ -106,6 +105,7 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
   }
 
   void updateBootstrapToggleEnabled(bool enabled) {
+    if(!renderedAtBrowser()) return;
     Enabled enabledEnum = enabled ? Enabled::enable : Enabled::disable;
     doJavaScript(
       "setTimeout(function() {\n"

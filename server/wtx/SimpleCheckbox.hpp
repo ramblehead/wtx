@@ -4,6 +4,7 @@
 
 #include <Wt/WEnvironment>
 #include <Wt/WAbstractToggleButton>
+#include <Wt/DomElement.h>
 
 namespace rh {
 

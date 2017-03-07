@@ -77,7 +77,7 @@ class JavaScriptWidget : public T {
     auto id = renderedAtBrowserId();
     auto rendered = RH_N(m_renderedAtBrowser);
     return
-      "($('#" + id + "').prop('"+ rendered + "') !== undefined)";
+      "(document.getElementById('" + id + "')."+ rendered + " !== undefined)";
   }
 
   virtual void renderAtBrowserFailed() {
@@ -118,9 +118,10 @@ class JavaScriptWidget : public T {
     std::string rendered = RH_N(m_renderedAtBrowser);
     Base::doJavaScript(
       "setTimeout(function() {\n"
-      "  if(document.getElementById('" + id + "')) {\n"
-      "    if($('#" + id + "').prop('"+ rendered + "') === undefined) {\n"
-      "      $('#" + id + "').prop('" + rendered + "', true);\n"
+      "  let element = document.getElementById('" + id + "')\n"
+      "  if(element) {\n"
+      "    if(element." + rendered + " === undefined) {\n"
+      "      element." + rendered + " = true;\n"
       "      (function() {"
       "         " + renderAtBrowserJavaScriptStatement() + ";\n"
       "      }());\n"
