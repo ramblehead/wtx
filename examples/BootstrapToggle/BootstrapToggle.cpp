@@ -1,8 +1,5 @@
 // Hey Emacs, this is -*- coding: utf-8; mode: c++ -*-
-// compile: g++ hello_wt.cpp -o hello_wt -Wall -Wextra -Werror -std=c++11 -DBOOST_SIGNALS_NO_DEPRECATION_WARNING -lwthttp -lwt -lboost_signals
-// run: ./BootstrapToggle --docroot ../../docroot --http-address 0.0.0.0 --http-port 8080
-// browser: http://localhost:8080/
-//      or: http://127.0.0.1:8080/
+// compile: g++ -std=c++14 BootstrapToggle.cpp -o BootstrapToggle -I../../server -I/home/rh/s600/s600-host/build/root/include -L /home/rh/s600/s600-host/build/root/lib -g -ggdb -lwt -lwthttp -Wl,-rpath=.
 
 #include <Wt/WApplication>
 #include <Wt/WBootstrapTheme>
@@ -20,7 +17,7 @@ class BootstrapToggleExampleApplication : public Wt::WApplication {
     requireJQuery(Wt::WLink("wtx/js/jquery-3.1.0.min.js").url());
 
     auto* theme = new Wt::WBootstrapTheme();
-    theme->setVeron(Wt::WBootstrapTheme::Version3);
+    theme->setVersion(Wt::WBootstrapTheme::Version3);
     setTheme(theme);
 
     setTitle("Wt Bootstrap Toggle Example");
@@ -49,7 +46,7 @@ int main(int argc, char **argv) {
 
 // Emacs, here are file hints,
 // The following lompile command assumes that libwt and libwthttp
-// "so" files can be located in "./"
+// "so" files can be located in "./" (i.e. -rpath=.)
 // Local Variables:
 // compile-command: "g++ -std=c++14 BootstrapToggle.cpp -o BootstrapToggle -I../../server -I/home/rh/s600/s600-host/build/root/include -L /home/rh/s600/s600-host/build/root/lib -g -ggdb -lwt -lwthttp -Wl,-rpath=."
 // End:

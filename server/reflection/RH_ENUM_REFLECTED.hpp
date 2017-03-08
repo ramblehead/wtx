@@ -1,6 +1,6 @@
 // Hey Emacs, this is -*- coding: utf-8 mode: c++ -*-
-#ifndef __RH_ENUM_CLASS_REFLECTED_hpp__
-#define __RH_ENUM_CLASS_REFLECTED_hpp__
+#ifndef __RH_ENUM_REFLECTED_hpp__
+#define __RH_ENUM_REFLECTED_hpp__
 
 #include <string>
 #include <functional>
@@ -26,7 +26,7 @@
 #define RH_ENUM_PROXIFY_LIST(...) \
   RH_FOR_EACH(RH__ENUM_PROXIFY_LIST_ITEM, __VA_ARGS__)
 
-#define RH_ENUM_CLASS_REFLECTED(RH_EnumClassReflected,...)              \
+#define RH_ENUM_REFLECTED(RH_EnumClassReflected,...)                    \
   class RH_EnumClassReflected {                                         \
    public:                                                              \
     enum Item {__VA_ARGS__};                                            \
@@ -46,20 +46,18 @@
       return RH_ENUM_STRINGIFY(RH_EnumClassReflected);                  \
     }                                                                   \
     constexpr static int itemsCount() {                                 \
-      constexpr const char* enumNames[] {                               \
+      constexpr const char* itemSymbols[] {                             \
         RH_ENUM_STRINGIFY_LIST(__VA_ARGS__)                             \
       };                                                                \
-      return sizeof(enumNames) / sizeof(enumNames[0]);                  \
+      return sizeof(itemSymbols) / sizeof(itemSymbols[0]);              \
     }                                                                   \
     static std::string itemName(int index) {                            \
-      constexpr const char* enumNames[] {                               \
+      constexpr const char* itemSymbols[] {                             \
         RH_ENUM_STRINGIFY_LIST(__VA_ARGS__)                             \
       };                                                                \
-      constexpr int count = itemsCount();                               \
-      if(index < 0 || index >= count) return std::string();             \
-      const char* itemName = enumNames[index];                          \
-      const size_t length = itemNameLength(itemName);                   \
-      return std::string(itemName, length);                             \
+      if(index < 0 || index >= itemsCount()) return std::string();      \
+      const char* symbol = itemSymbols[index];                          \
+      return std::string(symbol, itemNameLength(symbol));               \
     }                                                                   \
     static std::string itemName(Item item) {                            \
       return itemName(itemIndex(item));                                 \
@@ -67,38 +65,30 @@
     static void itemName(Item item,                                     \
                          std::function<void(std::string)> callback)     \
     {                                                                   \
-      constexpr Item items[] {RH_ENUM_PROXIFY_LIST(__VA_ARGS__)};       \
-      constexpr int count = itemsCount();                               \
-      for(int i = 0; i < count; ++i) {                                  \
-        if(items[i] == item) callback(itemName(i));                     \
+      for(int i = 0; i < itemsCount(); ++i) {                           \
+        if(itemValue(i) == item) callback(itemName(i));                 \
       }                                                                 \
     }                                                                   \
     constexpr static int itemIndex(const char* name) {                  \
-      constexpr const char* itemNames[] {                               \
+      constexpr const char* itemSymbols[] {                             \
         RH_ENUM_STRINGIFY_LIST(__VA_ARGS__)                             \
       };                                                                \
-      constexpr int count = itemsCount();                               \
-      for(int i = 0; i < count; ++i) {                                  \
-        const char* itemName = itemNames[i];                            \
-        if(itemHasName(itemName, name)) return i;                       \
+      for(int i = 0; i < itemsCount(); ++i) {                           \
+        if(itemHasName(itemSymbols[i], name)) return i;                 \
       }                                                                 \
       return -1;                                                        \
     }                                                                   \
     constexpr static int itemIndex(Item item) {                         \
-      constexpr Item items[] {RH_ENUM_PROXIFY_LIST(__VA_ARGS__)};       \
-      constexpr int count = itemsCount();                               \
-      for(int i = 0; i < count; ++i) {                                  \
-        if(items[i] == item) return i;                                  \
+      for(int i = 0; i < itemsCount(); ++i) {                           \
+        if(itemValue(i) == item) return i;                              \
       }                                                                 \
       return -1;                                                        \
     }                                                                   \
     static void itemIndex(Item item,                                    \
                           std::function<void(int)> callback)            \
     {                                                                   \
-      constexpr Item items[] {RH_ENUM_PROXIFY_LIST(__VA_ARGS__)};       \
-      constexpr int count = itemsCount();                               \
-      for(int i = 0; i < count; ++i) {                                  \
-        if(items[i] == item) callback(i);                               \
+      for(int i = 0; i < itemsCount(); ++i) {                           \
+        if(itemValue(i) == item) callback(i);                           \
       }                                                                 \
     }                                                                   \
     constexpr static Item itemValue(int index) {                        \
@@ -189,9 +179,9 @@
     }                                                                   \
     Item item_;                                                         \
   };
-//#define RH_ENUM_CLASS_REFLECTED
+//#define RH_ENUM_REFLECTED
 
 // itemThrowInvalidArgument() constexpr is a workaround for gcc bug:
 // http://stackoverflow.com/questions/34280729/throw-in-constexpr-function
 
-#endif //__RH_ENUM_CLASS_REFLECTED_hpp__
+#endif //__RH_ENUM_REFLECTED_hpp__

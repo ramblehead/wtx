@@ -5,7 +5,7 @@
 #include <string>
 #include <regex>
 
-#include "reflection/RH_ENUM_CLASS_REFLECTED.hpp"
+#include "reflection/RH_ENUM_REFLECTED.hpp"
 
 #include "JavaScriptWidget.hpp"
 #include "SimpleCheckbox.hpp"
@@ -20,11 +20,11 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
   using Base = JavaScriptWidget<SimpleCheckbox>;
 
  public:
-  RH_ENUM_CLASS_REFLECTED(
+  RH_ENUM_REFLECTED(
     Options, on, off, size, onstyle, offstyle, style, width, height);
-  RH_ENUM_CLASS_REFLECTED(State, on, off, initial = off);
-  RH_ENUM_CLASS_REFLECTED(Size, large, normal, small, mini, initial = normal);
-  RH_ENUM_CLASS_REFLECTED(Enabled, enable, disable);
+  RH_ENUM_REFLECTED(State, on, off, initial = off);
+  RH_ENUM_REFLECTED(Size, large, normal, small, mini, initial = normal);
+  RH_ENUM_REFLECTED(Enabled, enable, disable);
 
   BootstrapToggle(Wt::WContainerWidget* parent = nullptr,
                   State state = State::initial,
