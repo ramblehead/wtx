@@ -25,6 +25,15 @@ class BootstrapToggleExampleApplication : public Wt::WApplication {
     auto* mainContainer = new Wt::WContainerWidget();
 
     m_bootstrapToggle = new wtx::BootstrapToggle();
+
+    m_bootstrapToggle->checked().connect([this] (...) {
+      log("notice") << "*** bootstrapToggle checked ***";
+    });
+
+    m_bootstrapToggle->unChecked().connect([this] (...) {
+      log("notice") << "*** bootstrapToggle unchecked ***";
+    });
+
     mainContainer->addWidget(m_bootstrapToggle);
 
     root()->addWidget(mainContainer);

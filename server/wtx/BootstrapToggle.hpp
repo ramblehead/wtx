@@ -87,7 +87,7 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
     if(!renderedAtBrowser()) return;
     doJavaScript(
       "setTimeout(function() {\n"
-      "  if(!" + renderedAtBrowserJavaScriptPredicate() + ") return;"
+      "  if(!" + renderedAtBrowserJavaScriptPredicate() + ") return;\n"
       "  let $toggle = $('#" + id() + "');\n"
       "  let toggleDisabled = false;\n"
       "  if(!!$toggle.attr('disabled')) {\n"
@@ -109,7 +109,7 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
     Enabled enabledEnum = enabled ? Enabled::enable : Enabled::disable;
     doJavaScript(
       "setTimeout(function() {\n"
-      "  if(!" + renderedAtBrowserJavaScriptPredicate() + ") return;"
+      "  if(!" + renderedAtBrowserJavaScriptPredicate() + ") return;\n"
       "  $('#" + id() + "').bootstrapToggle('" +
       Enabled::itemName(enabledEnum) + "');\n"
       "}, 0);\n");
