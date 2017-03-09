@@ -35,23 +35,23 @@
     class ItemProxy {                                                   \
      public:                                                            \
       constexpr ItemProxy(                                              \
-        typename std::underlying_type<Item>::type item)                 \
+        typename std::underlying_type<Item>::type item) noexcept        \
         : item_(static_cast<Item>(item)) {}                             \
-      constexpr operator Item() const {return item_;}                   \
+      constexpr operator Item() const noexcept {return item_;}          \
      private:                                                           \
       Item item_;                                                       \
     };                                                                  \
    public:                                                              \
-    constexpr static const char* itemsEnumName() {                      \
+    constexpr static const char* itemsEnumName() noexcept  {            \
       return RH_ENUM_STRINGIFY(RH_EnumClassReflected);                  \
     }                                                                   \
-    constexpr static int itemsCount() {                                 \
+    constexpr static int itemsCount() noexcept {                        \
       constexpr const char* itemSymbols[] {                             \
         RH_ENUM_STRINGIFY_LIST(__VA_ARGS__)                             \
       };                                                                \
       return sizeof(itemSymbols) / sizeof(itemSymbols[0]);              \
     }                                                                   \
-    static std::string itemName(int index) {                            \
+    static std::string itemName(int index) noexcept {                   \
       constexpr const char* itemSymbols[] {                             \
         RH_ENUM_STRINGIFY_LIST(__VA_ARGS__)                             \
       };                                                                \
@@ -59,17 +59,17 @@
       const char* symbol = itemSymbols[index];                          \
       return std::string(symbol, itemNameLength(symbol));               \
     }                                                                   \
-    static std::string itemName(Item item) {                            \
+    static std::string itemName(Item item) noexcept {                   \
       return itemName(itemIndex(item));                                 \
     }                                                                   \
-    static void itemName(Item item,                                     \
-                         std::function<void(std::string)> callback)     \
+    static void itemName(                                               \
+      Item item, std::function<void(std::string)> callback)             \
     {                                                                   \
       for(int i = 0; i < itemsCount(); ++i) {                           \
         if(itemValue(i) == item) callback(itemName(i));                 \
       }                                                                 \
     }                                                                   \
-    constexpr static int itemIndex(const char* name) {                  \
+    constexpr static int itemIndex(const char* name) noexcept {         \
       constexpr const char* itemSymbols[] {                             \
         RH_ENUM_STRINGIFY_LIST(__VA_ARGS__)                             \
       };                                                                \
@@ -78,14 +78,14 @@
       }                                                                 \
       return -1;                                                        \
     }                                                                   \
-    constexpr static int itemIndex(Item item) {                         \
+    constexpr static int itemIndex(Item item) noexcept {                \
       for(int i = 0; i < itemsCount(); ++i) {                           \
         if(itemValue(i) == item) return i;                              \
       }                                                                 \
       return -1;                                                        \
     }                                                                   \
-    static void itemIndex(Item item,                                    \
-                          std::function<void(int)> callback)            \
+    static void itemIndex(                                              \
+      Item item, std::function<void(int)> callback)                     \
     {                                                                   \
       for(int i = 0; i < itemsCount(); ++i) {                           \
         if(itemValue(i) == item) callback(i);                           \
@@ -107,7 +107,7 @@
       constexpr Item items[] {RH_ENUM_PROXIFY_LIST(__VA_ARGS__)};       \
       return items[index];                                              \
     }                                                                   \
-    constexpr RH_EnumClassReflected(Item item = itemValue(0))           \
+    constexpr RH_EnumClassReflected(Item item = itemValue(0)) noexcept  \
       : item_(item)                                                     \
     {}                                                                  \
     constexpr RH_EnumClassReflected(const char* name)                   \
@@ -116,7 +116,9 @@
     RH_EnumClassReflected(std::string name)                             \
       : item_(itemValue(name.c_str()))                                  \
     {}                                                                  \
-    constexpr RH_EnumClassReflected& operator =(Item value) {           \
+    constexpr RH_EnumClassReflected&                                    \
+    operator =(Item value)  noexcept                                    \
+    {                                                                   \
       item_ = value; return *this;                                      \
     }                                                                   \
     constexpr RH_EnumClassReflected& operator =(const char* name) {     \
@@ -137,21 +139,23 @@
     bool operator !=(std::string name) {                                \
       return this->operator !=(name.c_str());                           \
     }                                                                   \
-    constexpr operator Item() const {return item_;}                     \
+    constexpr operator Item() const noexcept {return item_;}            \
     constexpr void itemName(const char* name) {                         \
       item_ = itemValue(name);                                          \
     }                                                                   \
     void itemName(std::string name) {                                   \
       item_ = itemValue(name.c_str());                                  \
     }                                                                   \
-    std::string itemName() const {                                      \
+    std::string itemName() const noexcept {                             \
       return RH_EnumClassReflected::itemName(item_);                    \
     }                                                                   \
     void itemName(std::function<void(std::string)> callback) const {    \
       RH_EnumClassReflected::itemName(item_, callback);                 \
     }                                                                   \
    private:                                                             \
-    constexpr static size_t itemNameLength(const char* symbol) {        \
+    constexpr static size_t                                             \
+    itemNameLength(const char* symbol) noexcept                         \
+    {                                                                   \
       int i = 0;                                                        \
       do {                                                              \
         if(symbol[i] == ' ' || symbol[i] == '=') return i;              \
@@ -160,8 +164,8 @@
       while(symbol[i] != '\0' && i < maxItemNameLength);                \
       return i;                                                         \
     }                                                                   \
-    constexpr static bool itemHasName(const char* symbol,               \
-                                      const char* name)                 \
+    constexpr static bool                                               \
+    itemHasName(const char* symbol, const char* name) noexcept          \
     {                                                                   \
       int i = 0;                                                        \
       do {                                                              \
