@@ -3,9 +3,8 @@
 #define __BootstrapToggle_hpp__
 
 #include <string>
-#include <regex>
 
-#include "reflection/RH_ENUM_REFLECTED.hpp"
+#include "reflection/RH_ENUM_SHELL.hpp"
 
 #include "JavaScriptWidget.hpp"
 #include "SimpleCheckbox.hpp"
@@ -20,11 +19,11 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
   using Base = JavaScriptWidget<SimpleCheckbox>;
 
  public:
-  RH_ENUM_REFLECTED(
+  RH_ENUM_SHELL(
     Options, on, off, size, onstyle, offstyle, style, width, height);
-  RH_ENUM_REFLECTED(State, on, off, initial = off);
-  RH_ENUM_REFLECTED(Size, large, normal, small, mini, initial = normal);
-  RH_ENUM_REFLECTED(Enabled, enable, disable);
+  RH_ENUM_SHELL(State, on, off, initial = off);
+  RH_ENUM_SHELL(Size, large, normal, small, mini, initial = normal);
+  RH_ENUM_SHELL(Enabled, enable, disable);
 
   BootstrapToggle(Wt::WContainerWidget* parent = nullptr,
                   State state = State::initial,
@@ -110,8 +109,8 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
     doJavaScript(
       "setTimeout(function() {\n"
       "  if(!" + renderedAtBrowserJavaScriptPredicate() + ") return;\n"
-      "  $('#" + id() + "').bootstrapToggle('" +
-      Enabled::itemName(enabledEnum) + "');\n"
+      "  $('#" + id() + "').bootstrapToggle('\n"
+      "    " + Enabled::itemName(enabledEnum) + "');\n"
       "}, 0);\n");
   };
 
