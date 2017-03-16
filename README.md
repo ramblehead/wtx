@@ -1,6 +1,6 @@
 # wtx: Wt Extensions
 
-_wtx_ is an experimental project aimed at looking for the right way to implement 3rd party extensions and widgets for [Wt, C++ Web Toolkit](https://www.webtoolkit.eu/).
+_wtx_ is an experimental project looking for the right way of implementing 3rd party JavaScript widgets for [Wt, C++ Web Toolkit](https://www.webtoolkit.eu/).
 
 Currently, only [Bootstrap Toggle](http://www.bootstraptoggle.com/) is implemented.
 
