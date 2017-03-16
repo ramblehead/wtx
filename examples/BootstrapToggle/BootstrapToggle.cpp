@@ -57,5 +57,5 @@ int main(int argc, char **argv) {
 // The following lompile command assumes that libwt and libwthttp
 // "so" files can be located in "./" (i.e. -rpath=.)
 // Local Variables:
-// compile-command: "g++ -std=c++14 BootstrapToggle.cpp -o BootstrapToggle -I../../server -I/home/rh/s600/s600-host/build/root/include -L/home/rh/s600/s600-host/build/root/lib -g -ggdb -lwt -lwthttp -Wl,-rpath=."
+// compile-command: "g++ -std=c++14 -g -ggdb BootstrapToggle.cpp -o BootstrapToggle -I../../server -I/home/rh/s600/s600-host/build/root/include -L/home/rh/s600/s600-host/build/root/lib -lwt -lwthttp -Wl,-rpath=."
 // End:

@@ -6,7 +6,7 @@
 #include <string>
 
 int forMax = 100;
-int paramsCount = 0;
+int paramsCount = 1;
 bool hasLastMacro = false;
 bool outputToFile = true;
 std::string prefix = "RH_";
