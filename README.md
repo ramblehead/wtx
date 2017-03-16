@@ -1,4 +1,4 @@
-#wtx: Wt Extensions
+# wtx: Wt Extensions
 
 _wtx_ is an experimental project aimed at looking for the right way to implement 3rd party extensions and widgets for [Wt, C++ Web Toolkit](https://www.webtoolkit.eu/).
 
