@@ -1,6 +1,6 @@
 # wtx: Wt Extensions
 
-_wtx_ is an experimental project looking for the right way of implementing [Wt, C++ Web Toolkit](https://www.webtoolkit.eu/) intercace classes for 3rd party JavaScript widgets.
+_wtx_ is an experimental project looking for the right way of implementing [Wt, C++ Web Toolkit](https://www.webtoolkit.eu/) interface classes for 3rd party JavaScript widgets.
 
 _wtx_ aims to simpify Wt and JavaScript widgets integration by reusing original or minimally adjusted JavaScript code.
 
