@@ -1,6 +1,6 @@
 #!/bin/bash
 ulimit -c unlimited
-./BootstrapToggle --config "../../etc/wt/wt_config.xml" \
+./BootstrapToggle --config "../../approot/wt/wt_config.xml" \
                   --docroot "../../docroot" \
                   --docroot-static "js,css,fonts,img,resources,wtx" \
                   --approot "../../approot" \

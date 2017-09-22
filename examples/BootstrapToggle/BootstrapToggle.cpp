@@ -26,8 +26,9 @@ class BootstrapToggleExampleApplication : public Wt::WApplication {
 
     auto* mainContainer = new Wt::WContainerWidget();
 
-    using State = wtx::BootstrapToggle::State;
-    m_bootstrapToggle = new wtx::BootstrapToggle(nullptr, State::on);
+    // using State = wtx::BootstrapToggle::State;
+    // m_bootstrapToggle = new wtx::BootstrapToggle(nullptr, State::on);
+    m_bootstrapToggle = new wtx::BootstrapToggle;
 
     m_bootstrapToggle->checked().connect([this](...) {
       log("notice") << "*** bootstrapToggle checked ***";
@@ -62,5 +63,5 @@ int main(int argc, char **argv) {
 // The following lompile command assumes that libwt and libwthttp
 // "so" files can be located in "./" (i.e. -rpath=.)
 // Local Variables:
-// compile-command: "g++ -std=c++14 -Wall -g -ggdb BootstrapToggle.cpp -o BootstrapToggle -I../../server -I/home/rh/s600/s600-host/build/root/include -L/home/rh/s600/s600-host/build/root/lib -lwt -lwthttp -Wl,-rpath=."
+// compile-command: "g++ -std=c++14 -Wall -g -ggdb BootstrapToggle.cpp -o BootstrapToggle -I../../server -I../../../s600-host/build/root/include -L../../../s600-host/build/root/lib -lwt -lwthttp -Wl,-rpath=."
 // End:

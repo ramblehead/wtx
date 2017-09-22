@@ -86,7 +86,7 @@ class SimpleCheckbox : public Wt::WAbstractToggleButton {
    *
    * \sa setChecked()
    */
-  bool isChecked() const {
+  virtual bool isChecked() const {
     return state_ == Wt::Checked;
   }
 
