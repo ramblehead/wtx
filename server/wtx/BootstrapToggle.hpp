@@ -21,13 +21,14 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
  public:
   // Initial values correspond to the initial values
   // used in JavaScript code of Bootstrap Toggle.
-  RH_ENUM_RSHELL(Options, "onText = on, offText = off, sizeStyle = size,"
-                 "onStyle = onstyle, offStyle = offstyle",
-                onText, offText, sizeStyle, onStyle, offStyle,
-                style, width, height);
+  RH_ENUM_RSHELL(Options,
+                 ((onText, "on"), (offText, "off"), (sizeStyle, "size"),
+                  (onStyle, "onstyle"), (offStyle, "offstyle")),
+                 onText, offText, sizeStyle, onStyle, offStyle,
+                 style, width, height);
   RH_ENUM_SHELL(State, on, off, initial = off);
   RH_ENUM_SHELL(SizeStyle, large, normal, small, mini, initial = normal);
-  RH_ENUM_RSHELL(StateStyle, "default_ = default",
+  RH_ENUM_RSHELL(StateStyle, ((default_, "default")),
                  default_, primary , success, info, warning, danger,
                  onInitial = primary, offInitial = default_);
   RH_ENUM_SHELL(Enabled, enable, disable);

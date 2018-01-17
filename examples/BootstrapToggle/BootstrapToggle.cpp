@@ -28,7 +28,7 @@ class BootstrapToggleExampleApplication : public Wt::WApplication {
 
     // using State = wtx::BootstrapToggle::State;
     // m_bootstrapToggle = new wtx::BootstrapToggle(nullptr, State::on);
-    m_bootstrapToggle = new wtx::BootstrapToggle;
+    m_bootstrapToggle = new wtx::BootstrapToggle();
 
     m_bootstrapToggle->checked().connect([this](...) {
       log("notice") << "*** bootstrapToggle checked ***";
