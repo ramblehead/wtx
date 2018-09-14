@@ -2,6 +2,8 @@
 #ifndef __RH_ENUM_SHELL_hpp__
 #define __RH_ENUM_SHELL_hpp__
 
+#include <iostream>
+
 #include <string>
 #include <vector>
 
@@ -31,8 +33,9 @@
 
 // (item01, item02), (item11, item12), (item21, item22), ...,
 // to
-// {"item01", item02}, {"item11", item12}, {"item21", item22}, ...,
-#define RH__ENUM_LISTIFY_PAIR(item1, item2) {RH__ENUM_STRINGIFY(item1), item2},
+// { "item01", item02 }, { "item11", item12 }, { "item21", item22 }, ...,
+#define RH__ENUM_LISTIFY_PAIR(item1, item2) \
+  { RH__ENUM_STRINGIFY(item1), item2 },
 #define RH__ENUM_LISTIFY_PAIR_ITEM(ignore, pair) RH__ENUM_LISTIFY_PAIR pair
 #define RH__ENUM_LISTIFY_PAIR_LIST(...) \
   RH_FOR_EACH_P1(RH__ENUM_LISTIFY_PAIR_ITEM, ~, __VA_ARGS__)
@@ -57,7 +60,7 @@
   RH__ENUM_EXPAND(RH__ENUM_CAT(RH__ENUM_WHEN_, renamed)(renames))
 
 class RH_EnumShell {
- public:
+ protected:
   constexpr static int
   itemFindCharInString(char c, const char* s) noexcept {
     for(size_t i = 0; i < RH__ENUM_ITEM_NAME_LENGTH_MAX; ++i) {
@@ -97,14 +100,15 @@ class RH_EnumShell {
   class RH__EnumShellName : public RH_EnumShell {                       \
    public:                                                              \
     enum RH__ENUM_CLASS(withClass) ItemType                             \
-    RH__ENUM_TYPE(itemUTyped, ItemUType) {__VA_ARGS__};                 \
+    RH__ENUM_TYPE(itemUTyped, ItemUType) { __VA_ARGS__ };               \
    private:                                                             \
     class ItemType ## Proxy {                                           \
      public:                                                            \
       constexpr ItemType ## Proxy(                                      \
         typename std::underlying_type<ItemType>::type item) noexcept    \
-        : item_(static_cast<ItemType>(item)) {}                         \
-      constexpr operator ItemType() const noexcept {return item_;}      \
+          : item_(static_cast<ItemType>(item))                          \
+      {}                                                                \
+      constexpr operator ItemType() const noexcept { return item_; }    \
      private:                                                           \
       ItemType item_;                                                   \
     };                                                                  \
@@ -134,8 +138,7 @@ class RH_EnumShell {
     static std::string itemName(ItemType item) {                        \
       return itemName(itemIndex(item));                                 \
     }                                                                   \
-    static std::vector<std::string> itemNames(ItemType item)            \
-    {                                                                   \
+    static std::vector<std::string> itemNames(ItemType item) {          \
       decltype(itemNames(item)) result;                                 \
       for(int i = 0; i < itemsCount(); ++i) {                           \
         if(itemValueNoRangeCheck(i) == item)                            \
@@ -170,8 +173,7 @@ class RH_EnumShell {
       }                                                                 \
       return itemValueNoRangeCheck(index);                              \
     }                                                                   \
-    constexpr static ItemType                                           \
-    itemValue(const char* name) {                                       \
+    constexpr static ItemType itemValue(const char* name) {             \
       int index = itemIndex(name);                                      \
       if(index < 0) {                                                   \
         itemThrowInvalidArgument("Invalid enum name");                  \
@@ -179,13 +181,13 @@ class RH_EnumShell {
       return itemValueNoRangeCheck(index);                              \
     }                                                                   \
     constexpr RH__EnumShellName(ItemType item = itemValue(0)) noexcept  \
-      : item_(item)                                                     \
+        : item_(item)                                                   \
     {}                                                                  \
     constexpr RH__EnumShellName(const char* name)                       \
-      : item_(itemValue(name))                                          \
+        : item_(itemValue(name))                                        \
     {}                                                                  \
-    RH__EnumShellName(std::string name)                                 \
-      : item_(itemValue(name.c_str()))                                  \
+    RH__EnumShellName(const std::string& name)                          \
+        : item_(itemValue(name.c_str()))                                \
     {}                                                                  \
     constexpr RH__EnumShellName& operator =(ItemType item) noexcept {   \
       item_ = item; return *this;                                       \
@@ -193,30 +195,30 @@ class RH_EnumShell {
     constexpr RH__EnumShellName& operator =(const char* name) {         \
       item_ = itemValue(name); return *this;                            \
     }                                                                   \
-    RH__EnumShellName& operator =(std::string name) {                   \
+    RH__EnumShellName& operator =(const std::string& name) {            \
       return this->operator =(name.c_str());                            \
     }                                                                   \
     constexpr bool operator ==(const char* name) const {                \
       return item_ == itemValue(name);                                  \
     }                                                                   \
-    bool operator ==(std::string name) const {                          \
+    bool operator ==(const std::string& name) const {                   \
       return this->operator ==(name.c_str());                           \
     }                                                                   \
     constexpr bool operator !=(const char* name) const {                \
       return !(item_ == itemValue(name));                               \
     }                                                                   \
-    bool operator !=(std::string name) const {                          \
+    bool operator !=(const std::string& name) const {                   \
       return this->operator !=(name.c_str());                           \
     }                                                                   \
-    constexpr operator ItemType() const {return itemValue();}           \
-    constexpr ItemType itemValue() const noexcept {return item_;}       \
+    constexpr operator ItemType() const { return itemValue(); }         \
+    constexpr ItemType itemValue() const noexcept { return item_; }     \
     constexpr bool itemName(const char* name) noexcept {                \
       int index = itemIndex(name);                                      \
       if(index < 0) return false;                                       \
       item_ = itemValueNoRangeCheck(index);                             \
       return true;                                                      \
     }                                                                   \
-    bool itemName(std::string name) noexcept {                          \
+    bool itemName(const std::string& name) noexcept {                   \
       return itemName(name.c_str());                                    \
     }                                                                   \
     std::string itemName() const {                                      \
@@ -225,10 +227,10 @@ class RH_EnumShell {
     std::vector<std::string> itemNames() const {                        \
       return RH__EnumShellName::itemNames(item_);                       \
     }                                                                   \
-   public:                                                              \
+   private:                                                             \
     constexpr static ItemType                                           \
     itemValueNoRangeCheck(int ItemType ## _index) noexcept {            \
-      enum RH__ENUM_TYPE(itemUTyped, ItemUType) {__VA_ARGS__};          \
+      enum RH__ENUM_TYPE(itemUTyped, ItemUType) { __VA_ARGS__ };        \
       constexpr ItemType ItemType ## _array[] {                         \
         RH__ENUM_PROXIFY_LIST(ItemType ## Proxy, __VA_ARGS__)           \
       };                                                                \
@@ -245,7 +247,7 @@ class RH_EnumShell {
       constexpr struct {                                                \
         const char* key;                                                \
         const char* value;                                              \
-        } renames[] = {RH__ENUM_RENAMES(itemsRenamed, itemRenames)};    \
+      } renames[] = { RH__ENUM_RENAMES(itemsRenamed, itemRenames) };    \
       for(const auto& rename : renames)                                 \
         if(itemBeginsWithName(symbol, rename.key)) return rename.value; \
       return symbol;                                                    \
@@ -259,7 +261,6 @@ class RH_EnumShell {
 
 // itemThrowInvalidArgument() constexpr is a workaround for gcc bug:
 // http://stackoverflow.com/questions/34280729/throw-in-constexpr-function
-
 
 #define RH_ENUM_SHELL(EnumSell, ...) \
   RH__ENUM_SHELL(EnumSell, NOCLASS,  \
@@ -316,10 +317,3 @@ class RH_EnumShell {
                  Item, TYPED, UType, RENAMED, itemRenames, __VA_ARGS__)
 
 #endif //__RH_ENUM_SHELL_hpp__
-
-// Emacs, here are this file hints.
-// Use nlinum mode instead of linum mode, as linum sometimes hangs
-// over long C macro definitions parsing.
-// Local Variables:
-// eval: (progn (linum-mode -1) (nlinum-mode 1))
-// End:

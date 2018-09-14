@@ -1,6 +1,6 @@
 // Hey Emacs, this is -*- coding: utf-8; mode: c++ -*-
-#ifndef __SimpleCheckbox_hpp__
-#define __SimpleCheckbox_hpp__
+#ifndef __rh_wtx_SimpleCheckBox_hpp__
+#define __rh_wtx_SimpleCheckBox_hpp__
 
 #include <Wt/WEnvironment>
 #include <Wt/WAbstractToggleButton>
@@ -10,19 +10,19 @@ namespace rh {
 
 namespace wtx {
 
-// SimpleCheckbox is modelled after Wt::WCheckBox
+// SimpleCheckBox is modelled after Wt::WCheckBox
 // Ideally, Wt::WFormWidget base class has to be used for
-// SimpleCheckbox class instead of Wt::WAbstractToggleButton.
+// SimpleCheckBox class instead of Wt::WAbstractToggleButton.
 // However, instances of Wt::WAbstractToggleButton class have some special
 // treatment in few places in Wt code, e.g.:
 // WBootstrapTheme.C:git95b2ad9:374
 // or
 // WFormWidget.C:git95b2ad9:259
-// Those treatments are also desirable for SimpleCheckbox (not adding
+// Those treatments are also desirable for SimpleCheckBox (not adding
 // "form-control" html class, for example). Otherwise, neither
 // Wt::WAbstractToggleButton functions, nor its methods are used in
-// SimpleCheckbox class.
-class SimpleCheckbox : public Wt::WAbstractToggleButton {
+// SimpleCheckBox class.
+class SimpleCheckBox : public Wt::WAbstractToggleButton {
  private:
   using Base = Wt::WAbstractToggleButton;
 
@@ -38,15 +38,15 @@ class SimpleCheckbox : public Wt::WAbstractToggleButton {
  public:
   /*! \brief Creates a checkbox without label.
    */
-  SimpleCheckbox(Wt::WContainerWidget *parent = 0)
-      : Base(parent)
+  SimpleCheckBox(Wt::WContainerWidget *parent = 0)
+    : Base(parent), state_(Wt::Unchecked)
   {
     setFormObject(true);
   }
 
   /*! \brief Destructor.
    */
-  ~SimpleCheckbox() override {}
+  ~SimpleCheckBox() override {}
 
   /*! \brief Sets the toggle state.
    *
@@ -251,7 +251,7 @@ class SimpleCheckbox : public Wt::WAbstractToggleButton {
     formObjects[formName()] = this;
   }
 
-  std::string formName() const override{
+  std::string formName() const override {
     return WFormWidget::formName();
   }
 
@@ -289,4 +289,4 @@ class SimpleCheckbox : public Wt::WAbstractToggleButton {
 
 } // namespace rh
 
-#endif // __SimpleCheckbox_hpp__
+#endif // __rh_wtx_SimpleCheckBox_hpp__

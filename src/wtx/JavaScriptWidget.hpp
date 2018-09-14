@@ -1,6 +1,6 @@
 // Hey Emacs, this is -*- coding: utf-8; mode: c++ -*-
-#ifndef __JavaScriptWidget_hpp__
-#define __JavaScriptWidget_hpp__
+#ifndef __rh_wtx_JavaScriptWidget_hpp__
+#define __rh_wtx_JavaScriptWidget_hpp__
 
 #include <utility>
 #include <string>
@@ -30,9 +30,9 @@ class JavaScriptWidget : public T {
  public:
   template<typename... Ts>
   JavaScriptWidget(Ts&&... params)
-    : Base(std::forward<Ts>(params)...),
-      m_setWtRenderedSPtr(
-        std::make_shared<SetWtRendered>(this, RH_N(m_setWtRenderedSPtr)))
+      : Base(std::forward<Ts>(params)...),
+        m_setWtRenderedSPtr(
+          std::make_shared<SetWtRendered>(this, RH_N(m_setWtRenderedSPtr)))
   {}
 
   void render(Wt::WFlags<Wt::RenderFlag> flags) override {
@@ -147,4 +147,4 @@ class JavaScriptWidget : public T {
 
 } // namespace rh
 
-#endif // __JavaScriptWidget_hpp__
+#endif // __rh_wtx_JavaScriptWidget_hpp__

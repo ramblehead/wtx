@@ -5,8 +5,8 @@
 #include <fstream>
 #include <string>
 
-int forMax = 100;
-int paramsCount = 1;
+int forMax = 5;
+int paramsCount = 0;
 bool hasLastMacro = false;
 bool outputToFile = true;
 std::string prefix = "RH_";

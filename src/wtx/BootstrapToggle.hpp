@@ -1,61 +1,66 @@
 // Hey Emacs, this is -*- coding: utf-8; mode: c++ -*-
-#ifndef __BootstrapToggle_hpp__
-#define __BootstrapToggle_hpp__
+#ifndef __rh_wtx_BootstrapToggle_hpp__
+#define __rh_wtx_BootstrapToggle_hpp__
 
 #include <string>
 
 #include "reflection/RH_ENUM_SHELL.hpp"
 
+#include "PostInitWidget.hpp"
 #include "JavaScriptWidget.hpp"
-#include "SimpleCheckbox.hpp"
+#include "SimpleCheckBox.hpp"
 
 namespace rh {
 
 namespace wtx {
 
-class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
+class PostInitSimpleCheckBox : public PostInitWidget<SimpleCheckBox> {
  private:
-  using This = BootstrapToggle;
-  using Base = JavaScriptWidget<SimpleCheckbox>;
+  using Base = PostInitWidget<SimpleCheckBox>;
 
  public:
-  // Initial values correspond to the initial values
-  // used in JavaScript code of Bootstrap Toggle.
-  RH_ENUM_RSHELL(Options,
-                 ((onText, "on"), (offText, "off"), (sizeStyle, "size"),
-                  (onStyle, "onstyle"), (offStyle, "offstyle")),
-                 onText, offText, sizeStyle, onStyle, offStyle,
-                 style, width, height);
-  RH_ENUM_SHELL(State, on, off, initial = off);
-  RH_ENUM_SHELL(SizeStyle, large, normal, small, mini, initial = normal);
-  RH_ENUM_RSHELL(StateStyle, ((default_, "default")),
-                 default_, primary , success, info, warning, danger,
-                 onInitial = primary, offInitial = default_);
+  PostInitSimpleCheckBox(Wt::WContainerWidget *parent = nullptr)
+      : Base({"0"}, parent)
+  {}
+};
+
+class BootstrapToggle : public JavaScriptWidget<PostInitSimpleCheckBox> {
+ private:
+  using This = BootstrapToggle;
+  using Base = JavaScriptWidget<PostInitSimpleCheckBox>;
+
+ public:
+  RH_ENUM_SHELL(
+    Options, on, off, size, onstyle, offstyle, style, width, height);
+  // RH_ENUM_SHELL(OnOffStyle, default, primary, success, info, warning, danger);
+  RH_ENUM_SHELL(State, on, off);
+  // Default size means let html/css to decide
+  RH_ENUM_SHELL(Size, large, normal, small, mini, initial);
   RH_ENUM_SHELL(Enabled, enable, disable);
 
-  BootstrapToggle(Wt::WContainerWidget* parent = nullptr,
-                  State state = State::initial,
-                  SizeStyle size = SizeStyle::initial)
-    : Base(parent)
+  BootstrapToggle(Size size = Size::initial,
+                  Wt::WContainerWidget* parent = nullptr)
+      : Base(parent)
   {
-    Base::setChecked(state == State::on ? true : false);
+    Base::setChecked(false);
     m_pendingState = Base::isChecked() ? State::on : State::off;
 
     std::stringstream javaScriptOptionsSS;
-    // Not setting default options to allow html attributes to override them.
+    // Not setting default options to allow html attributes override them.
     // see http://www.bootstraptoggle.com/ for details.
-    if(size != SizeStyle::initial) {
-      javaScriptOptionsSS << "{";
-      javaScriptOptionsSS << Options::itemName(Options::sizeStyle) << ":"
-                          << "'" << size.itemName() << "'";
-      javaScriptOptionsSS << "}";
+    if(size != Size::initial) {
+      javaScriptOptionsSS
+        << "{"
+        << Options::itemName(Options::size) << ":"
+        << "'" << size.itemName() << "'"
+        << "}";
     }
 
     m_javaScriptOptions = javaScriptOptionsSS.str();
 
-    changed().connect([this](Wt::NoClass) {
-      m_pendingState = Base::isChecked() ? State::on : State::off;
-    });
+    // changed().connect([this](Wt::NoClass) {
+    //   m_pendingState = Base::isChecked() ? State::on : State::off;
+    // });
 
     auto* app = Wt::WApplication::instance();
     app->useStyleSheet("wtx/css/bootstrap-toggle.css");
@@ -93,38 +98,34 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
 
  private:
   std::string renderAtBrowserJavaScriptStatement() override {
-    m_stateSentToBrowser = m_pendingState;
-    Enabled enabledEnum = isEnabled() ?
-                          Enabled::enable : Enabled::disable;
-    return
-      "(function() {\n"
-      "  let $toggle = $('#" + id() + "');\n"
-      "  $toggle.bootstrapToggle(" + m_javaScriptOptions + ");\n"
-      "  let onchange = $toggle.attr('onchange');\n"
-      "  $toggle.attr('onchange', null);\n"
-      "  $toggle.next().css('transition', 'none');\n"
-      "  $toggle.bootstrapToggle('" + m_stateSentToBrowser.itemName() + "');\n"
-      // Trigger a reflow, flushing the CSS changes.
-      // see https://stackoverflow.com/questions/11131875/what-is-the-cleanest-way-to-disable-css-transition-effects-temporarily
-      "  $toggle.next()[0].offsetHeight;\n"
-      "  $toggle.next().css('transition', '');\n"
-      "  $toggle.attr('onchange', onchange);\n"
-      "  $toggle.bootstrapToggle('" + enabledEnum.itemName() + "');\n"
-      "}())\n";
+    // m_stateSentToBrowser = m_pendingState;
+    // Enabled enabledEnum = isEnabled() ? Enabled::enable : Enabled::disable;
+    return "(function() {\n"
+           "  let $toggle = $('#" + id() + "');\n"
+           "  $toggle.bootstrapToggle(" + m_javaScriptOptions + ");\n"
+           // "  let onchange = $toggle.attr('onchange');\n"
+           // "  $toggle.attr('onchange', null);\n"
+           // "  $toggle.next().css('transition', 'none');\n"
+           // "  $toggle.bootstrapToggle('" + m_stateSentToBrowser.itemName() + "');\n"
+           // // Trigger a reflow, flushing the CSS changes.
+           // // see
+           // // https://stackoverflow.com/questions/11131875/what-is-the-cleanest-way-to-disable-css-transition-effects-temporarily
+           // "  $toggle.attr('onchange', onchange);\n"
+           // "  $toggle.next()[0].offsetHeight;\n"
+           // "  $toggle.next().css('transition', '');\n"
+           // "  $toggle.bootstrapToggle('" + enabledEnum.itemName() + "');\n"
+           "}())\n";
   }
 
   void afterRenderedAtBrowser() override {
     updateBootstrapToggleEnabled(isEnabled());
-    if(m_stateSentToBrowser != m_pendingState) {
-      Base::setChecked(m_pendingState == State::on ? true : false);
-      updateBootstrapToggleState(m_pendingState, true);
-    }
+    Base::setChecked(m_pendingState == State::on ? true : false);
+    updateBootstrapToggleState(m_pendingState, true);
   }
 
   void updateBootstrapToggleState(State state,
                                   bool disableTransition = false)
   {
-    m_stateSentToBrowser = state;
     using g = std::string;
     doJavaScript(
       "setTimeout(function() {\n"
@@ -140,7 +141,7 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
       + g(disableTransition ?
           "  $toggle.next().css('transition', 'none');\n" :
           "") +
-      "  $toggle.bootstrapToggle('" + m_stateSentToBrowser.itemName() + "');\n"
+      "  $toggle.bootstrapToggle('" + state.itemName() + "');\n"
       + g(disableTransition ?
           // Trigger a reflow, flushing the CSS changes.
           // see https://stackoverflow.com/questions/11131875/what-is-the-cleanest-way-to-disable-css-transition-effects-temporarily
@@ -164,7 +165,6 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
       "}, 0);\n");
   }
 
-  State m_stateSentToBrowser;
   State m_pendingState;
   std::string m_javaScriptOptions;
 };
@@ -173,4 +173,4 @@ class BootstrapToggle : public JavaScriptWidget<SimpleCheckbox> {
 
 } // namespace rh
 
-#endif // __BootstrapToggle_hpp__
+#endif // __rh_wtx_BootstrapToggle_hpp__
