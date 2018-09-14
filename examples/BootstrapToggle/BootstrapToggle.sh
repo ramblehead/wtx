@@ -1,4 +1,5 @@
 #!/bin/bash
+
 ulimit -c unlimited
 ./BootstrapToggle --config "../../approot/wt/wt_config.xml" \
                   --docroot "../../docroot" \
