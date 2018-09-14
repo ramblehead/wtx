@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -eu
+set -o pipefail
+
+PRJ_PATH="`dirname \"${BASH_SOURCE[0]}\"`"
+PRJ_PATH="`( cd -P \"$PRJ_PATH\" && pwd )`"
+
+SRC_TREE_PATH="$PRJ_PATH/.."
+SRC_TREE_PATH="`( cd -P \"$SRC_TREE_PATH\" && pwd )`"

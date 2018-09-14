@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -eu
+set -o pipefail
+
+DIR="`dirname \"${BASH_SOURCE[0]}\"`"
+if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+source "$DIR/paths"
+unset DIR
+
+if [[ ! -d "$SRC_TREE_PATH"/docroot/resources ]]; then
+  if [[ -d /usr/share/Wt/resources ]]; then
+    WT_RESOURCES=/usr/share/Wt/resources
+  elif [[ -d /usr/local/share/Wt/resources ]]; then
+    WT_RESOURCES=/usr/local/share/Wt/resources
+  else
+    echo 'docroot-init: ".../Wt/resources" are not found'
+    exit 1
+  fi
+  cp -r $WT_RESOURCES "$SRC_TREE_PATH"/docroot
+
+  WT_RESOURCES_COPY="$SRC_TREE_PATH"/docroot/resources
+
+  if [[ ! -s "WT_RESOURCES_COPY"/themes/bootstrap/fonts ]]; then
+    ln -s ../../../fonts "$WT_RESOURCES_COPY"/themes/bootstrap
+  fi
+fi
