@@ -1,5 +1,4 @@
 // Hey Emacs, this is -*- coding: utf-8; mode: c++ -*-
-// compile: g++ -std=c++14 -Wall -g -ggdb BootstrapToggle.cpp -o BootstrapToggle -I../../src -lwt -lwthttp
 
 #include <Wt/WServer>
 
